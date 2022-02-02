@@ -163,7 +163,7 @@ const requestArray = [{
 client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
   console.log('value: ', JSON.stringify(value, null, 2));
 });
-client.writeProperty('192.168.200.34', objects.jalouise, propertyIds.priorityArray, prep, (err) => {
+client.writeProperty('192.168.200.34', objects.jalouise, propertyIds.presentValue, [{type: 9, value: 1}], { priority: 16 }, (err) => {
   console.log('error: ', err);
 });
 
