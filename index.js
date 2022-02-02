@@ -29,8 +29,14 @@ client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
   console.log('value: ', JSON.stringify(value, null, 2));
 });
 
-setInterval(() => {
-  client.readProperty('192.168.200.34', objects.ventilGet, propertyIds.presentValue, (err, value) => {
+for(let i = 0; i < 123; i++)
+  client.readProperty('192.168.200.34', objects.ventilGet, i, (err, value) => {
     console.log('value: ', JSON.stringify(value, null, 2));
   });
-}, 1000);
+
+// read presentValue every second
+// setInterval(() => {
+//   client.readProperty('192.168.200.34', objects.ventilGet, propertyIds.presentValue, (err, value) => {
+//     console.log('value: ', JSON.stringify(value, null, 2));
+//   });
+// }, 1000);
