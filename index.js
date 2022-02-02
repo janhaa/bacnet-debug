@@ -122,8 +122,8 @@ const prep = [
     "type": 0
   },
   {
-    "value": true,
-    "type": 1
+    "value": 1,
+    "type": 9
   },
   {
     "value": null,
