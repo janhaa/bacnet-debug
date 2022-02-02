@@ -3,21 +3,34 @@ const bacnet = require('bacstack');
 // Initialize BACStack
 const client = new bacnet({apduTimeout: 6000});
 
-// Discover Devices
-/*client.on('iAm', (device) => {
-  console.log('address: ', device.address);
-  console.log('deviceId: ', device.deviceId);
-  console.log('maxApdu: ', device.maxApdu);
-  console.log('segmentation: ', device.segmentation);
-  console.log('vendorId: ', device.vendorId);
-});*/
-// client.whoIs();
+const propertyIds = {
+  objectName: 77,
+  presentValue: 85,
+  priorityArray: 87
+}
+
+const prop = (name) => {
+  return {
+    id: propertyIds[name]
+  }
+}
+
+const objects = {
+  ventilSet: {type: 1, instance: 1207},
+  ventilGet: {type: 0, instance: 1208},
+}
 
 // Read Device Object
 const requestArray = [{
-  objectId: {type: 1, instance: 1207},
-  properties: [{id: 87}]
+  objectId: ventilSet,
+  properties: [prop('priorityArray'), prop('objectName')]
 }];
 client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
   console.log('value: ', JSON.stringify(value, null, 2));
 });
+
+setInterval(() => {
+  client.readProperty('192.168.200.34', ventilGet, prop('presentValue'), (err, value) => {
+    console.log('value: ', JSON.stringify(value, null, 2));
+  });
+}, 1000);
