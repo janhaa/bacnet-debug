@@ -21,6 +21,140 @@ const objects = {
   jalouise: { type: 5, instance: 3204002 }
 }
 
+const orig = [
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": 0,
+    "type": 9
+  },
+  {
+    "value": null,
+    "type": 0
+  }
+];
+
+const prep = [
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": true,
+    "type": 1
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": null,
+    "type": 0
+  },
+  {
+    "value": 0,
+    "type": 9
+  },
+  {
+    "value": null,
+    "type": 0
+  }
+]
+
 // Read Device Object
 const requestArray = [{
   objectId: objects.jalouise,
@@ -28,6 +162,9 @@ const requestArray = [{
 }];
 client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
   console.log('value: ', JSON.stringify(value, null, 2));
+});
+client.writeProperty('192.168.200.34', objects.jalouise, propertyIds.priorityArray, prep, (err) => {
+  console.log('error: ', err);
 });
 
 // for(let i = 81; i < 123; i++)
