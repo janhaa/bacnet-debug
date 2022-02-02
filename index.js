@@ -16,8 +16,9 @@ const prop = (name) => {
 }
 
 const objects = {
-  ventilSet: {type: 1, instance: 1207},
-  ventilGet: {type: 0, instance: 1208},
+  ventilSet: { type: 1, instance: 1207},
+  ventilGet: { type: 0, instance: 1208},
+  jalouise: { type: 5, instance: 3204002 }
 }
 
 // Read Device Object
