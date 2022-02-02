@@ -29,8 +29,8 @@ client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
   console.log('value: ', JSON.stringify(value, null, 2));
 });
 
-for(let i = 81; i < 123; i++)
-  client.readProperty('192.168.200.34', objects.ventilGet, i, (err, value) => {
+for(let i = 0; i < 123; i++)
+  client.readProperty('192.168.200.34', objects.ventilSet, i, (err, value) => {
     if(value)
       console.log(i, JSON.stringify(value.values, null, 2));
   });
