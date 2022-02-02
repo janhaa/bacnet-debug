@@ -22,7 +22,7 @@ const objects = {
 
 // Read Device Object
 const requestArray = [{
-  objectId: ventilSet,
+  objectId: objects.ventilSet,
   properties: [prop('priorityArray'), prop('objectName')]
 }];
 client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
@@ -30,7 +30,7 @@ client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
 });
 
 setInterval(() => {
-  client.readProperty('192.168.200.34', ventilGet, prop('presentValue'), (err, value) => {
+  client.readProperty('192.168.200.34', objects.ventilGet, prop('presentValue'), (err, value) => {
     console.log('value: ', JSON.stringify(value, null, 2));
   });
 }, 1000);
