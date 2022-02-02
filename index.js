@@ -30,7 +30,7 @@ client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
 });
 
 setInterval(() => {
-  client.readProperty('192.168.200.34', objects.ventilGet, prop('presentValue'), (err, value) => {
+  client.readProperty('192.168.200.34', objects.ventilGet, propertyIds.presentValue, (err, value) => {
     console.log('value: ', JSON.stringify(value, null, 2));
   });
 }, 1000);
