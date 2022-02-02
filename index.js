@@ -22,15 +22,13 @@ const objects = {
 }
 
 // Read Device Object
-const requestArray = [{
-  objectId: objects.jalouise,
-  properties: [prop('priorityArray'), prop('objectName')]
-}];
-client.readPropertyMultiple('192.168.200.34', requestArray, (err, value) => {
-  console.log('value:', JSON.stringify(value, null, 2));
-});
 client.writeProperty('192.168.200.34', objects.jalouise, propertyIds.presentValue, [{ type: 9, value: 1}], { priority: 14 }, (err) => {
-  console.log('error:', err);
+  client.readPropertyMultiple('192.168.200.34', [{
+    objectId: objects.jalouise,
+    properties: [prop('priorityArray'), prop('objectName')]
+  }], (err, value) => {
+    console.log('value:', JSON.stringify(value, null, 2));
+  });
 });
 
 // for(let i = 81; i < 123; i++)
