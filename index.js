@@ -40,7 +40,7 @@ switch (cmd) {
   case 'clear':
     {
       let priority = 0;
-      for (priority = 0; priority <= 13; priority++)
+      for (priority = 0; priority <= 14; priority++)
         client.writeProperty('192.168.200.34', objects[obj], propertyIds.presentValue, [{ type: 4, value: null }], { priority }, (err) => {
           client.readPropertyMultiple('192.168.200.34', [{
             objectId: objects[obj],
