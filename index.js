@@ -1,8 +1,5 @@
 const bacnet = require('bacstack');
 
-// Initialize BACStack
-const client = new bacnet({ apduTimeout: 6000 });
-
 const propertyIds = {
   objectName: 77,
   presentValue: 85,
@@ -35,6 +32,9 @@ if (!(obj in objects)) {
   console.log(Object.keys(objects));
   return;
 }
+
+// Initialize BACStack
+const client = new bacnet({ apduTimeout: 6000 });
 
 switch (cmd) {
   case 'clear':
