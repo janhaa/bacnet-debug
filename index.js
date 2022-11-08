@@ -49,6 +49,7 @@ switch (cmd) {
             console.log('value:', JSON.stringify(value, null, 2));
           });
         });
+      break;
     }
   case 'poll':
     {
@@ -57,6 +58,7 @@ switch (cmd) {
           console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
         });
       }, 1000);
+      break;
     }
   case 'enumProps':
     {
@@ -65,7 +67,7 @@ switch (cmd) {
           if (value)
             console.log(i, JSON.stringify(value.values, null, 2));
         });
-
+      break;
     }
 }
 
