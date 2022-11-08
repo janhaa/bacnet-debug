@@ -1,7 +1,7 @@
 const bacnet = require('bacstack');
 
 // Initialize BACStack
-const client = new bacnet({apduTimeout: 6000});
+const client = new bacnet({ apduTimeout: 6000 });
 
 const propertyIds = {
   objectName: 77,
@@ -27,19 +27,47 @@ const { argv } = process;
 console.log(argv);
 
 const cmd = argv[2];
-const dev = argv[3];
+const obj = argv[3];
 
-// modify device
-let priority = 0;
-for(priority = 0; priority <= 13; priority++)
-client.writeProperty('192.168.200.34', objects.ventilSet, propertyIds.presentValue, [{ type: 4, value: null}], { priority }, (err) => {
-   client.readPropertyMultiple('192.168.200.34', [{
-     objectId: objects.ventilSet,
-     properties: [prop('priorityArray'), prop('objectName')]
-   }], (err, value) => {
-     console.log('value:', JSON.stringify(value, null, 2));
-   });
-});
+if (!(obj in objects)) {
+  console.log("no such object", obj);
+  console.log("supported are:");
+  console.log(Object.keys(objects));
+  return;
+}
+
+switch (cmd) {
+  case 'clear':
+    {
+      let priority = 0;
+      for (priority = 0; priority <= 13; priority++)
+        client.writeProperty('192.168.200.34', objects[obj], propertyIds.presentValue, [{ type: 4, value: null }], { priority }, (err) => {
+          client.readPropertyMultiple('192.168.200.34', [{
+            objectId: objects[obj],
+            properties: [prop('priorityArray'), prop('objectName')]
+          }], (err, value) => {
+            console.log('value:', JSON.stringify(value, null, 2));
+          });
+        });
+    }
+  case 'poll':
+    {
+      setInterval(() => {
+        client.readProperty('192.168.200.34', objects[obj], propertyIds.priorityArray, (err, value) => {
+          console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
+        });
+      }, 1000);
+    }
+  case 'enumProps':
+    {
+      for (let i = 81; i < 123; i++)
+        client.readProperty('192.168.200.34', objects[obj], i, (err, value) => {
+          if (value)
+            console.log(i, JSON.stringify(value.values, null, 2));
+        });
+
+    }
+}
 
 // for(let i = 81; i < 123; i++)
 //   client.readProperty('192.168.200.34', objects.ventilSet, i, (err, value) => {
@@ -47,12 +75,6 @@ client.writeProperty('192.168.200.34', objects.ventilSet, propertyIds.presentVal
 //       console.log(i, JSON.stringify(value.values, null, 2));
 //   });
 
-// read presentValue every second
-setInterval(() => {
-  client.readProperty('192.168.200.34', objects.ventilator, propertyIds.priorityArray, (err, value) => {
-    console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
-  });
-}, 1000);
 
 /*client.writeProperty('192.168.200.34', objects.ventilator, propertyIds.presentValue, [{ type: 0, value: null}], { priority: 8 }, (err) => {
   client.readPropertyMultiple('192.168.200.34', [{
