@@ -19,18 +19,27 @@ const objects = {
   ventilator: { type: 1, instance: 1206 },
   ventilSet: { type: 1, instance: 1207 },
   ventilGet: { type: 0, instance: 1208 },
-  jalouise: { type: 5, instance: 3204002 }
+  jalouise: { type: 2, instance: 1401002 }
 }
 
-// Read Device Object
-// client.writeProperty('192.168.200.34', objects.jalouise, propertyIds.presentValue, [{ type: 9, value: 1}], { priority: 14 }, (err) => {
-//   client.readPropertyMultiple('192.168.200.34', [{
-//     objectId: objects.jalouise,
-//     properties: [prop('priorityArray'), prop('objectName')]
-//   }], (err, value) => {
-//     console.log('value:', JSON.stringify(value, null, 2));
-//   });
-// });
+const { argv } = process;
+
+console.log(argv);
+
+const cmd = argv[2];
+const dev = argv[3];
+
+// modify device
+let priority = 0;
+for(priority = 0; priority <= 13; priority++)
+client.writeProperty('192.168.200.34', objects.ventilSet, propertyIds.presentValue, [{ type: 4, value: null}], { priority }, (err) => {
+   client.readPropertyMultiple('192.168.200.34', [{
+     objectId: objects.ventilSet,
+     properties: [prop('priorityArray'), prop('objectName')]
+   }], (err, value) => {
+     console.log('value:', JSON.stringify(value, null, 2));
+   });
+});
 
 // for(let i = 81; i < 123; i++)
 //   client.readProperty('192.168.200.34', objects.ventilSet, i, (err, value) => {
@@ -40,16 +49,16 @@ const objects = {
 
 // read presentValue every second
 setInterval(() => {
-  client.readProperty('192.168.200.34', objects.ventilSet, propertyIds.priorityArray, (err, value) => {
-    console.log('value: ', JSON.stringify(value, null, 2));
+  client.readProperty('192.168.200.34', objects.ventilator, propertyIds.priorityArray, (err, value) => {
+    console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
   });
 }, 1000);
 
-client.writeProperty('192.168.200.34', objects.ventilator, propertyIds.presentValue, [{ type: 0, value: null}], { priority: 13 }, (err) => {
+/*client.writeProperty('192.168.200.34', objects.ventilator, propertyIds.presentValue, [{ type: 0, value: null}], { priority: 8 }, (err) => {
   client.readPropertyMultiple('192.168.200.34', [{
     objectId: objects.jalouise,
     properties: [prop('priorityArray'), prop('objectName')]
   }], (err, value) => {
     console.log('value:', JSON.stringify(value, null, 2));
   });
-});
+});*/
