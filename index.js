@@ -44,14 +44,25 @@ switch (cmd) {
       console.log('maxAdpu: ', device.maxAdpu);
       console.log('segmentation: ', device.segmentation);
       console.log('vendorId: ', device.vendorId);
-      const objectList = 76;
+      const objectListPropertyId = 76;
+      const objectNamePropertyId = 77;
       // for(let i = 0; i < 255; i++)
       client.readProperty(
         '192.168.72.23',
         { type: 8, instance: device.deviceId },
-        objectList,
+        objectListPropertyId,
         (err, value) => {
-          console.log(JSON.stringify(value))
+          value.values.forEach(object => {
+            client.readProperty(
+              '192.168.72.23',
+              object.value,
+              objectNamePropertyId,
+              (err, value) => {
+                console.log(value)
+              }
+            );
+          })
+
         }
       );
     });
