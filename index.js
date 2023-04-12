@@ -58,7 +58,7 @@ switch (cmd) {
               object.value,
               objectNamePropertyId,
               (err, value) => {
-                console.log(value)
+                console.log(value.values[0].value)
               }
             );
           })
