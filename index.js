@@ -38,18 +38,26 @@ const client = new bacnet({ apduTimeout: 6000 });
 
 switch (cmd) {
   case 'whois': {
-	client.on('iAm', (device) => {
-		console.log('address: ', device.address);
-		console.log('deviceId: ', device.deviceId);
-		console.log('maxAdpu: ', device.maxAdpu);
-		console.log('segmentation: ', device.segmentation);
-		console.log('vendorId: ', device.vendorId);
-		for(let i = 0; i < 255; i++)
-		   client.readProperty('192.168.72.23', { type: 8, instance: device.deviceId }, i, (err, value) => { console.log(i, JSON.stringify(value)) });  
-	});
-	client.whoIs({ address: '192.168.72.23' } );
-	break;
-}
+    client.on('iAm', (device) => {
+      console.log('address: ', device.address);
+      console.log('deviceId: ', device.deviceId);
+      console.log('maxAdpu: ', device.maxAdpu);
+      console.log('segmentation: ', device.segmentation);
+      console.log('vendorId: ', device.vendorId);
+      const objectList = 76;
+      // for(let i = 0; i < 255; i++)
+      client.readProperty(
+        '192.168.72.23',
+        { type: 8, instance: device.deviceId },
+        objectList,
+        (err, value) => {
+          console.log(JSON.stringify(value))
+        }
+      );
+    });
+    client.whoIs({ address: '192.168.72.23' });
+    break;
+  }
   case 'clear':
     {
       let priority = 0;
@@ -61,7 +69,7 @@ switch (cmd) {
           }], (err, value) => {
             console.log('value:', JSON.stringify(value.values[0].values[0].value.map(val => val.value), null, 0));
             client.close()
-	  });
+          });
         });
       break;
     }
