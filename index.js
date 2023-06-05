@@ -39,6 +39,7 @@ const devices = {
 const device = devices[argv.device];
 const cmd = argv.cmd;
 const propName = argv.prop;
+const objName = argv.objName;
 const objType = argv.objType;
 const objInstance = argv.objInstance;
 const value = argv.value;
@@ -46,7 +47,7 @@ let obj;
 
 if(["write", "clear", "poll", "enumProps"].includes(cmd))
 {
-  if (device.knownObjects.hasOwnProperty(propName)) {
+  if (device.knownObjects.hasOwnProperty(objName)) {
     obj = device.knownObjects[propName];
   } else {
     const objType_ = parseInt(objType);
