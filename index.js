@@ -137,8 +137,17 @@ switch (cmd) {
     }
   case 'poll':
     {
+      if (!(propName in propertyIds)) {
+        console.log("No such property", propName);
+        console.log("Supported are:");
+        console.log(Object.keys(propertyIds));
+        return;
+      }
+
+      const propId = propertyIds[propName];
+      
       setInterval(() => {
-        client.readProperty(device.ip, obj, propertyIds.priorityArray, (err, value) => {
+        client.readProperty(device.ip, obj, propId, (err, value) => {
           console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
         });
       }, 1000);
