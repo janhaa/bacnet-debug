@@ -104,7 +104,7 @@ switch (cmd) {
   case 'poll':
     {
       setInterval(() => {
-        client.readProperty(device.ip, object, propertyIds.priorityArray, (err, value) => {
+        client.readProperty(device.ip, obj, propertyIds.priorityArray, (err, value) => {
           console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
         });
       }, 1000);
