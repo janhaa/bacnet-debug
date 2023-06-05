@@ -3,6 +3,8 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
+console.log(argv);
+
 const propertyIds = {
   objectName: 77,
   presentValue: 85,
@@ -40,7 +42,7 @@ const propName = argv.prop;
 const value = argv.value;
 let obj;
 
-if(["clear", "poll", "enumProps"].includes(cmd))
+if(["write", "clear", "poll", "enumProps"].includes(cmd))
 {
   if (device.knownObjects.hasOwnProperty(propName)) {
     obj = device.knownObjects[propName];
@@ -59,10 +61,10 @@ if(["clear", "poll", "enumProps"].includes(cmd))
 // Initialize BACStack
 const client = new bacnet({ apduTimeout: 6000 });
 
+console.log( { obj })
+
 switch (cmd) {
    case 'write': {
-    const propName = argv[4];
-    const value = argv[5];
     if (!(propName in propertyIds)) {
       console.log("No such property", propName);
       console.log("Supported are:");
