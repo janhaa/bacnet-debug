@@ -39,6 +39,8 @@ const devices = {
 const device = devices[argv.device];
 const cmd = argv.cmd;
 const propName = argv.prop;
+const objType = argv.objType;
+const objInstance = argv.objInstance;
 const value = argv.value;
 let obj;
 
@@ -47,8 +49,8 @@ if(["write", "clear", "poll", "enumProps"].includes(cmd))
   if (device.knownObjects.hasOwnProperty(propName)) {
     obj = device.knownObjects[propName];
   } else {
-    const objType = parseInt(propName);
-    const objInstance = parseInt(value);
+    const objType = parseInt(objType);
+    const objInstance = parseInt(objInstance);
 
     if (isNaN(objType) || isNaN(objInstance)) {
       console.log("Invalid object type or instance");
