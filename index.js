@@ -1,5 +1,8 @@
 const bacnet = require('bacstack');
 const { argv } = process;
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const argv = yargs(hideBin(process.argv)).argv;
 
 const propertyIds = {
   objectName: 77,
@@ -32,19 +35,19 @@ const devices = {
   // add more devices as necessary
 }
 
-const device = devices[argv[2]];
-const cmd = argv[3];
-const propName = argv[4];
-const value = argv[5];
+const device = devices[argv.device];
+const cmd = argv.cmd;
+const propName = argv.prop;
+const value = argv.value;
 let obj;
 
 if(["clear", "poll", "enumProps"].includes(cmd))
 {
-  if (device.knownObjects.hasOwnProperty(argv[4])) {
-    obj = device.knownObjects[argv[4]];
+  if (device.knownObjects.hasOwnProperty(propName)) {
+    obj = device.knownObjects[propName];
   } else {
-    const objType = parseInt(argv[4]);
-    const objInstance = parseInt(argv[5]);
+    const objType = parseInt(propName);
+    const objInstance = parseInt(value);
 
     if (isNaN(objType) || isNaN(objInstance)) {
       console.log("Invalid object type or instance");
@@ -54,7 +57,6 @@ if(["clear", "poll", "enumProps"].includes(cmd))
     obj = { type: objType, instance: objInstance };
   }
 }
-
 // Initialize BACStack
 const client = new bacnet({ apduTimeout: 6000 });
 
