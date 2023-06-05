@@ -43,6 +43,7 @@ const objName = argv.objName;
 const objType = argv.objType;
 const objInstance = argv.objInstance;
 const value = argv.value;
+const valueType = argv.valueType;
 let obj;
 
 if(["write", "clear", "poll", "enumProps"].includes(cmd))
@@ -76,7 +77,7 @@ switch (cmd) {
     }
 
     const propId = propertyIds[propName];
-    client.writeProperty(device.ip, obj, propId, [{ type: 0, value: value }], { priority: 8 }, (err) => {
+    client.writeProperty(device.ip, obj, propId, [{ type: valueType, value: value }], { priority: 8 }, (err) => {
       if (err) {
         console.log('Write property error:', err);
       } else {
