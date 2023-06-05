@@ -55,23 +55,23 @@ const client = new bacnet({ apduTimeout: 6000 });
 
 switch (cmd) {
   case 'whois': {
-    client.on('iAm', (device) => {
-      console.log('address: ', device.address);
-      console.log('deviceId: ', device.deviceId);
-      console.log('maxAdpu: ', device.maxAdpu);
-      console.log('segmentation: ', device.segmentation);
-      console.log('vendorId: ', device.vendorId);
+    client.on('iAm', (iAmDevice) => {
+      console.log('address: ', iAmDevice.address);
+      console.log('deviceId: ', iAmDevice.deviceId);
+      console.log('maxAdpu: ', iAmDevice.maxAdpu);
+      console.log('segmentation: ', iAmDevice.segmentation);
+      console.log('vendorId: ', iAmDevice.vendorId);
       const objectListPropertyId = 76;
       const objectNamePropertyId = 77;
       // for(let i = 0; i < 255; i++)
       client.readProperty(
-        device,
-        { type: 8, instance: device.deviceId },
+        device.ip,
+        { type: 8, instance: iAmDevice.deviceId },
         objectListPropertyId,
         (err, value) => {
           value.values.forEach(object => {
             client.readProperty(
-              device,
+              device.ip,
               object.value,
               objectNamePropertyId,
               (err, value) => {
@@ -83,7 +83,7 @@ switch (cmd) {
         }
       );
     });
-    client.whoIs({ address: device });
+    client.whoIs({ address: device.ip });
     break;
   }
   case 'clear':
