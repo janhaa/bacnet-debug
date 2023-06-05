@@ -48,13 +48,13 @@ switch (cmd) {
       const objectNamePropertyId = 77;
       // for(let i = 0; i < 255; i++)
       client.readProperty(
-        '192.168.72.23',
+        '192.168.200.34',
         { type: 8, instance: device.deviceId },
         objectListPropertyId,
         (err, value) => {
           value.values.forEach(object => {
             client.readProperty(
-              '192.168.72.23',
+              '192.168.200.34',
               object.value,
               objectNamePropertyId,
               (err, value) => {
@@ -66,7 +66,7 @@ switch (cmd) {
         }
       );
     });
-    client.whoIs({ address: '192.168.72.23' });
+    client.whoIs({ address: '192.168.200.34' });
     break;
   }
   case 'clear':
