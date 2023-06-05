@@ -15,14 +15,14 @@ const prop = (name) => {
 
 // Define a list of devices and known objects
 const devices = {
-  device1: {
+  delta: {
     ip: '192.168.200.34',
     knownObjects: {
       ventilator: { type: 1, instance: 1206 },
       // add more known objects for device1
     }
   },
-  device2: {
+  schneider: {
     ip: '192.168.72.23',
     knownObjects: {
       ventilator: { type: 1, instance: 1207 },
