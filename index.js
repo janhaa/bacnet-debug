@@ -34,26 +34,53 @@ const devices = {
 
 const device = devices[argv[2]];
 const cmd = argv[3];
+const propName = argv[4];
+const value = argv[5];
 let obj;
 
-if (device.knownObjects.hasOwnProperty(argv[4])) {
-  obj = device.knownObjects[argv[4]];
-} else {
-  const objType = parseInt(argv[4]);
-  const objInstance = parseInt(argv[5]);
+if(["clear", "poll", "enumProps"].includes(cmd))
+{
+  if (device.knownObjects.hasOwnProperty(argv[4])) {
+    obj = device.knownObjects[argv[4]];
+  } else {
+    const objType = parseInt(argv[4]);
+    const objInstance = parseInt(argv[5]);
 
-  if (isNaN(objType) || isNaN(objInstance)) {
-    console.log("Invalid object type or instance");
-    return;
+    if (isNaN(objType) || isNaN(objInstance)) {
+      console.log("Invalid object type or instance");
+      return;
+    }
+
+    obj = { type: objType, instance: objInstance };
   }
-
-  obj = { type: objType, instance: objInstance };
 }
 
 // Initialize BACStack
 const client = new bacnet({ apduTimeout: 6000 });
 
 switch (cmd) {
+   case 'write': {
+    const propName = argv[4];
+    const value = argv[5];
+    if (!(propName in propertyIds)) {
+      console.log("No such property", propName);
+      console.log("Supported are:");
+      console.log(Object.keys(propertyIds));
+      return;
+    }
+
+    const propId = propertyIds[propName];
+    client.writeProperty(device.ip, obj, propId, [{ type: 0, value: value }], { priority: 8 }, (err) => {
+      if (err) {
+        console.log('Write property error:', err);
+      } else {
+        console.log('Property', propName, 'written successfully');
+      }
+    });
+
+    break;
+  }
+    
   case 'whois': {
     client.on('iAm', (iAmDevice) => {
       console.log('address: ', iAmDevice.address);
