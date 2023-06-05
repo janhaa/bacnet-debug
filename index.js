@@ -49,15 +49,15 @@ if(["write", "clear", "poll", "enumProps"].includes(cmd))
   if (device.knownObjects.hasOwnProperty(propName)) {
     obj = device.knownObjects[propName];
   } else {
-    const objType = parseInt(objType);
-    const objInstance = parseInt(objInstance);
+    const objType_ = parseInt(objType);
+    const objInstance_ = parseInt(objInstance);
 
-    if (isNaN(objType) || isNaN(objInstance)) {
+    if (isNaN(objType_) || isNaN(objInstance_)) {
       console.log("Invalid object type or instance");
       return;
     }
 
-    obj = { type: objType, instance: objInstance };
+    obj = { type: objType_, instance: objInstance_ };
   }
 }
 // Initialize BACStack
