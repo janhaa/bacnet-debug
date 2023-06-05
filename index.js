@@ -71,7 +71,7 @@ switch (cmd) {
         (err, value) => {
           value.values.forEach(object => {
             client.readProperty(
-              device
+              device,
               object.value,
               objectNamePropertyId,
               (err, value) => {
