@@ -1,4 +1,5 @@
 const bacnet = require('bacstack');
+const { argv } = process;
 
 const propertyIds = {
   objectName: 77,
@@ -12,25 +13,41 @@ const prop = (name) => {
   }
 }
 
-const objects = {
-  ventilator: { type: 1, instance: 1206 },
-  ventilSet: { type: 1, instance: 1207 },
-  ventilGet: { type: 0, instance: 1208 },
-  jalouise: { type: 2, instance: 1401002 }
+// Define a list of devices and known objects
+const devices = {
+  device1: {
+    ip: '192.168.200.34',
+    knownObjects: {
+      ventilator: { type: 1, instance: 1206 },
+      // add more known objects for device1
+    }
+  },
+  device2: {
+    ip: '192.168.72.23',
+    knownObjects: {
+      ventilator: { type: 1, instance: 1207 },
+      // add more known objects for device2
+    }
+  },
+  // add more devices as necessary
 }
 
-const { argv } = process;
+const device = devices[argv[2]];
+const cmd = argv[3];
+let obj;
 
-//console.log(argv);
+if (device.knownObjects.hasOwnProperty(argv[4])) {
+  obj = device.knownObjects[argv[4]];
+} else {
+  const objType = parseInt(argv[4]);
+  const objInstance = parseInt(argv[5]);
 
-const cmd = argv[2];
-const obj = argv[3];
+  if (isNaN(objType) || isNaN(objInstance)) {
+    console.log("Invalid object type or instance");
+    return;
+  }
 
-if (cmd !== 'whois' && !(obj in objects)) {
-  console.log("no such object", obj);
-  console.log("supported are:");
-  console.log(Object.keys(objects));
-  return;
+  obj = { type: objType, instance: objInstance };
 }
 
 // Initialize BACStack
@@ -48,13 +65,13 @@ switch (cmd) {
       const objectNamePropertyId = 77;
       // for(let i = 0; i < 255; i++)
       client.readProperty(
-        '192.168.200.34',
+        device,
         { type: 8, instance: device.deviceId },
         objectListPropertyId,
         (err, value) => {
           value.values.forEach(object => {
             client.readProperty(
-              '192.168.200.34',
+              device
               object.value,
               objectNamePropertyId,
               (err, value) => {
@@ -66,15 +83,15 @@ switch (cmd) {
         }
       );
     });
-    client.whoIs({ address: '192.168.200.34' });
+    client.whoIs({ address: device });
     break;
   }
   case 'clear':
     {
       let priority = 0;
       for (priority = 0; priority <= 17; priority++)
-        client.writeProperty('192.168.200.34', objects[obj], propertyIds.presentValue, [{ type: 0, value: null }], { priority }, (err) => {
-          client.readPropertyMultiple('192.168.200.34', [{
+        client.writeProperty(device, objects[obj], propertyIds.presentValue, [{ type: 0, value: null }], { priority }, (err) => {
+          client.readPropertyMultiple(device, [{
             objectId: objects[obj],
             properties: [prop('priorityArray'), prop('objectName')]
           }], (err, value) => {
@@ -87,7 +104,7 @@ switch (cmd) {
   case 'poll':
     {
       setInterval(() => {
-        client.readProperty('192.168.200.34', objects[obj], propertyIds.priorityArray, (err, value) => {
+        client.readProperty(device, objects[obj], propertyIds.priorityArray, (err, value) => {
           console.log('value: ', JSON.stringify(value.values.map(e => e.value)));//,null, 2));
         });
       }, 1000);
@@ -96,7 +113,7 @@ switch (cmd) {
   case 'enumProps':
     {
       for (let i = 81; i < 123; i++)
-        client.readProperty('192.168.72.23', objects[obj], i, (err, value) => {
+        client.readProperty(device, objects[obj], i, (err, value) => {
           if (value)
             console.log(i, JSON.stringify(value.values, null, 2));
         });
